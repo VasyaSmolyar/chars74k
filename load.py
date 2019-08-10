@@ -2,6 +2,7 @@ from PIL import Image
 import numpy as np
 import settings
 import os
+import h5py
 
 def PIL2array(img):
     if type(img.getdata()[1]) == int:
@@ -74,6 +75,30 @@ def load_chars74k(src='Img'):
     y_test = np.array(y_test)
     return (x_train, x_test, y_train, y_test)
 
+def load_data(src='Img',folder='data'):
+    if settings.save_img_narray:
+        if not os.path.exists(folder):
+            os.mkdir(folder)
+        name = "dataset_{}_{}.h5".format("good" if settings.only_good_imgs else "all", settings.validation_rate)
+        fn = os.path.join(folder,name)
+        if os.path.isfile(fn):
+            h5f = h5py.File(fn, 'r')
+            x_train = h5f['xtrain'][:]
+            x_test = h5f['xtest'][:]
+            y_train = h5f['ytrain'][:]
+            y_test = h5f['ytest'][:]
+            h5f.close()
+            return (x_train, x_test, y_train, y_test)
+        else:
+            x_train, x_test, y_train, y_test = load_chars74k(src)
+            h5f = h5py.File(fn, 'w')
+            h5f.create_dataset('xtrain', data=x_train)
+            h5f.create_dataset('xtest', data=x_test)
+            h5f.create_dataset('ytrain', data=y_train)
+            h5f.create_dataset('ytest', data=y_test)
+            h5f.close()
+            return (x_train, x_test, y_train, y_test)
+
 if __name__ == "__main__":
-    x_train, x_test, y_train, y_test = load_chars74k()
+    x_train, x_test, y_train, y_test = load_data()
     print(x_train.shape, y_train.shape)
