@@ -12,5 +12,5 @@ only_good_imgs = True
 #part of validation sample
 validation_rate = 0.1
 
-#save prepared array in h5
+#save prepared array in h5 file and load from this file or not
 save_img_narray = True

@@ -67,11 +67,12 @@ def load_chars74k(src='Img'):
     x_test = [x[i] for i in test]
     x_train = sorted(x_train, key = lambda i : len(i))
     y_train = [y[i] for i in set(range(x.shape[0])) - set(test)]
-    y_test = [x[i] for i in test]
+    y_test = [y[i] for i in test]
     y_train = sorted(y_train, key = lambda i : len(i))
     x_train = np.array(x_train)
     x_test = np.array(x_test)
     y_train = np.array(y_train)
+    y_test = np.array(y_test)
     y_test = np.array(y_test)
     return (x_train, x_test, y_train, y_test)
 
@@ -98,6 +99,8 @@ def load_data(src='Img',folder='data'):
             h5f.create_dataset('ytest', data=y_test)
             h5f.close()
             return (x_train, x_test, y_train, y_test)
+    else:
+        return load_chars74k(src)
 
 if __name__ == "__main__":
     x_train, x_test, y_train, y_test = load_data()
