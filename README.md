@@ -1,5 +1,6 @@
 # chars74k
 Classifying characters example
+
 Max accuracy on the train set is about 96%, on the validation set is about 86%   
 
 ## Disclaimer
